@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f0f4f8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>INTERPACK 2026 | סיור תערוכה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef5;
+    --border: #d0dae8;
+    --accent: #0072b8;
+    --accent2: #e85d20;
+    --accent3: #2a9d3f;
+    --text: #1a2540;
+    --text2: #4a5a7a;
+    --text3: #8a9ab8;
+    --gold: #c4880a;
+    --danger: #d42050;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,100,180,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,100,180,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== HEADER ===== */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(240,244,248,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .app-logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .app-logo .brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .app-logo .title {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .stat-badge {
+    text-align: center;
+  }
+
+  .stat-badge .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-badge .lbl {
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===== NAV ===== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: rgba(240,244,248,0.97);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 4px;
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-family: 'Heebo', sans-serif;
+    font-size: 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-btn.active {
+    color: var(--accent);
+  }
+
+  .nav-btn.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 0 0 4px 4px;
+  }
+
+  .nav-icon { font-size: 22px; line-height: 1; }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; padding: 16px 16px 100px; position: relative; z-index: 1; }
+  .screen.active { display: block; }
+
+  /* ===== HALL TABS ===== */
+  .hall-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+  }
+  .hall-tabs::-webkit-scrollbar { display: none; }
+
+  .hall-tab {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .hall-tab.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ===== COMPANY CARD ===== */
+  .company-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .company-card:active { transform: scale(0.98); }
+
+  .company-card.bookmarked {
+    border-color: var(--gold);
+  }
+
+  .company-card.visited {
+    border-color: var(--accent3);
+  }
+
+  .card-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .company-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+
+  .card-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hall-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(0,200,255,0.1);
+    border: 1px solid rgba(0,200,255,0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .category-tag {
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.15s;
+  }
+
+  .icon-btn:active { transform: scale(0.9); }
+  .icon-btn.active { background: rgba(255,209,102,0.15); border-color: var(--gold); }
+
+  .card-notes-preview {
+    padding: 0 16px 14px;
+    font-size: 12px;
+    color: var(--text2);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .media-pills {
+    display: flex;
+    gap: 6px;
+    padding: 0 16px 14px;
+    flex-wrap: wrap;
+  }
+
+  .media-pill {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .media-pill.photo { background: rgba(127,255,110,0.1); color: var(--accent3); border: 1px solid rgba(127,255,110,0.2); }
+  .media-pill.video { background: rgba(255,107,53,0.1); color: var(--accent2); border: 1px solid rgba(255,107,53,0.2); }
+  .media-pill.audio { background: rgba(0,200,255,0.1); color: var(--accent); border: 1px solid rgba(0,200,255,0.2); }
+  .media-pill.note  { background: rgba(255,209,102,0.1); color: var(--gold); border: 1px solid rgba(255,209,102,0.2); }
+
+  /* ===== SEARCH ===== */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .search-bar input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    direction: rtl;
+  }
+
+  .search-bar input::placeholder { color: var(--text3); }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,40,80,0.5);
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius) var(--radius) 0 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .modal-title { font-size: 18px; font-weight: 700; }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: none;
+    color: var(--text2);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-body { padding: 20px; }
+
+  /* ===== FORM ELEMENTS ===== */
+  .form-section {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-textarea { min-height: 100px; resize: vertical; }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 10px;
+  }
+
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: rgba(255,68,102,0.15); color: var(--danger); border: 1px solid rgba(255,68,102,0.3); }
+  .btn-success { background: rgba(127,255,110,0.15); color: var(--accent3); border: 1px solid rgba(127,255,110,0.3); }
+
+  /* ===== PHOTO GRID ===== */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .photo-thumb {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+
+  .photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-thumb .delete-photo {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 50%;
+    border: none;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .add-photo-btn {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 2px dashed var(--border);
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text3);
+    font-size: 24px;
+    transition: all 0.2s;
+    gap: 4px;
+  }
+
+  .add-photo-btn span { font-size: 10px; }
+  .add-photo-btn:active { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== VIDEO LINK ===== */
+  .video-link-display {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .video-thumb-icon { font-size: 28px; }
+
+  .video-link-display .link-text {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    direction: ltr;
+    text-align: left;
+  }
+
+  /* ===== AUDIO RECORDER ===== */
+  .audio-recorder {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .record-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .record-btn.idle { background: var(--surface2); color: var(--accent); }
+  .record-btn.recording {
+    background: var(--danger);
+    color: white;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(255,68,102,0.2); }
+  }
+
+  .record-info { flex: 1; }
+  .record-status { font-size: 13px; color: var(--text2); }
+  .record-timer { font-family: 'IBM Plex Mono', monospace; font-size: 20px; color: var(--text); }
+
+  .audio-clips {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .audio-clip {
+    background: rgba(0,200,255,0.05);
+    border: 1px solid rgba(0,200,255,0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0,200,255,0.15);
+    border: none;
+    color: var(--accent);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .clip-info { flex: 1; }
+  .clip-name { font-size: 12px; color: var(--text); }
+  .clip-dur { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); }
+
+  /* ===== SUMMARY SCREEN ===== */
+  .summary-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .summary-header .big-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .summary-header .big-label {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .summary-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .summary-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .summary-stat .s-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .summary-stat .s-lbl {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  .visited-section .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .visited-section .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .rating-stars {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .star {
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.15s;
+  }
+
+  .star.active { opacity: 1; }
+
+  .priority-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .priority-high { background: rgba(255,68,102,0.15); color: var(--danger); border: 1px solid rgba(255,68,102,0.3); }
+  .priority-med  { background: rgba(255,209,102,0.15); color: var(--gold); border: 1px solid rgba(255,209,102,0.3); }
+  .priority-low  { background: rgba(127,255,110,0.1); color: var(--accent3); border: 1px solid rgba(127,255,110,0.2); }
+
+  /* ===== MAP SCREEN ===== */
+  .map-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .hall-map {
+    padding: 20px;
+    position: relative;
+  }
+
+  .map-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .hall-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .hall-block:active { transform: scale(0.95); }
+
+  .hall-block.has-visits {
+    border-color: var(--accent3);
+    background: rgba(127,255,110,0.05);
+  }
+
+  .hall-block.bookmarked-hall {
+    border-color: var(--gold);
+    background: rgba(255,209,102,0.05);
+  }
+
+  .hall-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .hall-name {
+    font-size: 9px;
+    color: var(--text3);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .hall-count {
+    font-size: 10px;
+    color: var(--accent3);
+    margin-top: 4px;
+  }
+
+  .hall-dot {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text3);
+  }
+
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state .empty-title { font-size: 16px; color: var(--text2); margin-bottom: 8px; }
+  .empty-state .empty-sub { font-size: 13px; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 300;
+    opacity: 0;
+    transition: all 0.3s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== ADD COMPANY MODAL ===== */
+  .segments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .segment-option {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text2);
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .segment-option.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,200,255,0.08);
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* loading spinner */
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .import-note {
+    background: rgba(0,200,255,0.06);
+    border: 1px solid rgba(0,200,255,0.15);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .section-header {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .visited-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(127,255,110,0.1);
+    color: var(--accent3);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .interest-selector {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .interest-btn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Heebo', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .interest-btn.sel-high { background: rgba(255,68,102,0.15); color: var(--danger); border-color: rgba(255,68,102,0.4); }
+  .interest-btn.sel-med { background: rgba(255,209,102,0.15); color: var(--gold); border-color: rgba(255,209,102,0.4); }
+  .interest-btn.sel-low { background: rgba(127,255,110,0.1); color: var(--accent3); border-color: rgba(127,255,110,0.3); }
+
+  /* Export section */
+  .export-area {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .export-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .export-sub { font-size: 12px; color: var(--text2); margin-bottom: 16px; }
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="app-header">
+  <div class="app-logo">
+    <span class="brand">INTERPACK 2026</span>
+    <span class="title">סיור תערוכה</span>
+  </div>
+  <div class="header-stats">
+    <div class="stat-badge">
+      <div class="num" id="hdr-visited">0</div>
+      <div class="lbl">ביקרתי</div>
+    </div>
+    <div class="stat-badge">
+      <div class="num" id="hdr-bookmarked">0</div>
+      <div class="lbl">מועדפים</div>
+    </div>
+  </div>
+</header>
+
+<!-- Screens -->
+
+<!-- === COMPANIES SCREEN === -->
+<div class="screen active" id="screen-companies">
+  <div class="search-bar">
+    <span>🔍</span>
+    <input type="text" id="search-input" placeholder="חפש חברה, מוצר, מגרש..." oninput="filterCompanies()">
+  </div>
+
+  <div class="hall-tabs" id="hall-tabs-container">
+    <button class="hall-tab active" onclick="filterByHall('all', this)">הכל</button>
+    <button class="hall-tab" onclick="filterByHall('1-4', this)">אולמות 1-4 (ממתקים)</button>
+    <button class="hall-tab" onclick="filterByHall('5-6', this)">אולמות 5-6 (מזון)</button>
+    <button class="hall-tab" onclick="filterByHall('11-14', this)">אולמות 11-14 (מזון/משקאות)</button>
+    <button class="hall-tab" onclick="filterByHall('7-10', this)">אולמות 7-10 (חומרי אריזה)</button>
+    <button class="hall-tab" onclick="filterByHall('15-17', this)">אולמות 15-17 (פארמה)</button>
+    <button class="hall-tab" onclick="filterByHall('18', this)">אולם 18 (קומפוננטים)</button>
+  </div>
+
+  <div class="section-header">
+    <span>חברות מציגות</span>
+    <button class="icon-btn" style="width:auto;padding:0 10px;font-size:12px;" onclick="openAddCompanyModal()">+ הוסף ידנית</button>
+  </div>
+
+  <div id="companies-list"></div>
+</div>
+
+<!-- === BOOTH VISIT SCREEN === -->
+<div class="screen" id="screen-visit">
+  <div id="visit-content">
+    <div class="empty-state">
+      <div class="empty-icon">📍</div>
+      <div class="empty-title">בחר ביתן לביקור</div>
+      <div class="empty-sub">לחץ על כרטיס חברה ואז "פתח ביקור"</div>
+    </div>
+  </div>
+</div>
+
+<!-- === MAP SCREEN === -->
+<div class="screen" id="screen-map">
+  <div class="import-note">
+    📍 <strong>מיקומים לפי אולמות INTERPACK 2026</strong> — לחץ על אולם לראות חברות מאותו אולם
+  </div>
+
+  <div class="map-container">
+    <div class="hall-map">
+      <div style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:12px;letter-spacing:1px;">MESSE DÜSSELDORF — מפת אולמות</div>
+      <div class="map-grid" id="halls-map-grid"></div>
+    </div>
+  </div>
+
+  <div id="map-hall-companies"></div>
+</div>
+
+<!-- === SUMMARY SCREEN === -->
+<div class="screen" id="screen-summary">
+  <div class="summary-header">
+    <div class="big-num" id="sum-visited-count">0</div>
+    <div class="big-label">חברות שביקרתי</div>
+  </div>
+
+  <div class="summary-stats">
+    <div class="summary-stat">
+      <div class="s-num" style="color:var(--danger)" id="sum-high">0</div>
+      <div class="s-lbl">עדיפות גבוהה</div>
+    </div>
+    <div class="summary-stat">
+      <div class="s-num" style="color:var(--gold)" id="sum-med">0</div>
+      <div class="s-lbl">לבדיקה</div>
+    </div>
+    <div class="summary-stat">
+      <div class="s-num" style="color:var(--accent)" id="sum-photos">0</div>
+      <div class="s-lbl">תמונות</div>
+    </div>
+  </div>
+
+  <div class="export-area">
+    <div class="export-title">📤 ייצוא לאחר התערוכה</div>
+    <div class="export-sub">קבל דו"ח מסכם של כל הביקורים, ממצאים ותמונות</div>
+    <button class="btn btn-primary" onclick="exportSummary()">📄 ייצא דו"ח PDF</button>
+    <button class="btn btn-secondary" onclick="copyTextSummary()">📋 העתק סיכום טקסט</button>
+  </div>
+
+  <div class="visited-section">
+    <div class="section-title">חברות שביקרתי</div>
+    <div id="summary-list"></div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="switchScreen('companies', this)">
+    <span class="nav-icon">🏢</span>חברות
+  </button>
+  <button class="nav-btn" onclick="switchScreen('visit', this)">
+    <span class="nav-icon">📸</span>ביקור
+  </button>
+  <button class="nav-btn" onclick="switchScreen('map', this)">
+    <span class="nav-icon">🗺️</span>מפה
+  </button>
+  <button class="nav-btn" onclick="switchScreen('summary', this)">
+    <span class="nav-icon">📊</span>סיכום
+  </button>
+</nav>
+
+<!-- Company Detail Modal -->
+<div class="modal-overlay" id="company-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-company-name">חברה</span>
+      <button class="close-btn" onclick="closeModal('company-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-company-body"></div>
+  </div>
+</div>
+
+<!-- Visit Detail Modal -->
+<div class="modal-overlay" id="visit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="visit-modal-title">תיעוד ביקור</span>
+      <button class="close-btn" onclick="closeModal('visit-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="visit-modal-body"></div>
+  </div>
+</div>
+
+<!-- Add Company Modal -->
+<div class="modal-overlay" id="add-company-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">הוסף חברה</span>
+      <button class="close-btn" onclick="closeModal('add-company-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-section">
+        <label class="form-label">שם החברה *</label>
+        <input class="form-input" id="new-company-name" placeholder="שם החברה">
+      </div>
+      <div class="form-section">
+        <label class="form-label">מדינה</label>
+        <input class="form-input" id="new-company-country" placeholder="למשל: Germany">
+      </div>
+      <div class="form-section">
+        <label class="form-label">מיקום (אולם + ביתן)</label>
+        <input class="form-input" id="new-company-location" placeholder="למשל: Hall 11 / B23">
+      </div>
+      <div class="form-section">
+        <label class="form-label">קטגוריה</label>
+        <div class="segments-grid" id="new-category-grid"></div>
+      </div>
+      <div class="form-section">
+        <label class="form-label">קישור לאתר / יוטיוב</label>
+        <input class="form-input" id="new-company-url" placeholder="https://..." dir="ltr">
+      </div>
+      <button class="btn btn-primary" onclick="saveNewCompany()">✅ הוסף חברה</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Hidden file input -->
+<input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none" multiple>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const HALLS = {
+  '1-4': { name: 'ממתקים ואפייה', icon: '🍫', halls: ['1','3','4'] },
+  '5-6': { name: 'מזון וצרכנות', icon: '🥫', halls: ['5','6'] },
+  '11-14': { name: 'מזון/משקאות/תעשייה', icon: '🍶', halls: ['11','12','13','14'] },
+  '7-10': { name: 'חומרי אריזה', icon: '📦', halls: ['7','7a','8a','8b','9','10'] },
+  '15-17': { name: 'פארמה וקוסמטיקה', icon: '💊', halls: ['15','16','17'] },
+  '18': { name: 'קומפוננטים', icon: '⚙️', halls: ['18a','18b'] },
+};
+
+const CATEGORIES = [
+  'מכונות אריזה','מכונות מילוי','מיון ובקרה','תיוג ותוויות','קירור ואחסון',
+  'רובוטיקה ואוטומציה','חומרי אריזה','מכונות עיבוד','בקרת איכות','חיישנים ומדידה','פארמה','אחר'
+];
+
+const ICONS = ['🏭','🤖','📦','🔬','⚙️','🧪','🎯','🔧','💡','🌿'];
+
+// Default exhibitors based on INTERPACK 2026 info
+let companies = [
+  { id:'c1', name:'MULTIVAC', country:'Germany', location:'Hall 13 / A01', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.multivac.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c2', name:'Krones', country:'Germany', location:'Hall 11 / C15', hallGroup:'11-14', category:'מכונות מילוי', url:'https://www.krones.com', bookmarked:false, visited:false, icon:'🍶' },
+  { id:'c3', name:'Syntegon', country:'Germany', location:'Hall 6 / B12', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.syntegon.com', bookmarked:false, visited:false, icon:'🔧' },
+  { id:'c4', name:'IMA Group', country:'Italy', location:'Hall 15 / A05', hallGroup:'15-17', category:'פארמה', url:'https://www.ima.it', bookmarked:false, visited:false, icon:'💊' },
+  { id:'c5', name:'Marchesini Group', country:'Italy', location:'Hall 16 / D03', hallGroup:'15-17', category:'פארמה', url:'https://www.marchesini.com', bookmarked:false, visited:false, icon:'💊' },
+  { id:'c6', name:'OPTIMA', country:'Germany', location:'Hall 17 / B08', hallGroup:'15-17', category:'מכונות אריזה', url:'https://www.optima-packaging.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c7', name:'Ishida', country:'Japan', location:'Hall 11 / A22', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.ishidaeurope.com', bookmarked:false, visited:false, icon:'🎯' },
+  { id:'c8', name:'KHS', country:'Germany', location:'Hall 12 / C04', hallGroup:'11-14', category:'מכונות מילוי', url:'https://www.khs.com', bookmarked:false, visited:false, icon:'🍶' },
+  { id:'c9', name:'Gerhard Schubert', country:'Germany', location:'Hall 5 / A18', hallGroup:'5-6', category:'רובוטיקה ואוטומציה', url:'https://www.schubert.group', bookmarked:false, visited:false, icon:'🤖' },
+  { id:'c10', name:'ULMA Packaging', country:'Spain', location:'Hall 14 / B06', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.ulmapackaging.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c11', name:'Domino Printing Sciences', country:'UK', location:'Hall 8a / D11', hallGroup:'7-10', category:'תיוג ותוויות', url:'https://www.domino-printing.com', bookmarked:false, visited:false, icon:'🏷️' },
+  { id:'c12', name:'Bluhm Systeme', country:'Germany', location:'Hall 8b / A09', hallGroup:'7-10', category:'תיוג ותוויות', url:'https://www.bluhmsysteme.com', bookmarked:false, visited:false, icon:'🏷️' },
+  { id:'c13', name:'Aasted', country:'Denmark', location:'Hall 1 / C02', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.aasted.com', bookmarked:false, visited:false, icon:'🍫' },
+  { id:'c14', name:'Sollich', country:'Germany', location:'Hall 3 / B14', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.sollich.com', bookmarked:false, visited:false, icon:'🍫' },
+  { id:'c15', name:'Bühler', country:'Switzerland', location:'Hall 4 / A01', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.buhlergroup.com', bookmarked:false, visited:false, icon:'⚙️' },
+  { id:'c16', name:'Coesia Group', country:'Italy', location:'Hall 6 / A11', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.coesia.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c17', name:'Duravant', country:'USA', location:'Hall 13 / B22', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.duravant.com', bookmarked:false, visited:false, icon:'🏭' },
+  { id:'c18', name:'SACMI', country:'Italy', location:'Hall 4 / C08', hallGroup:'1-4', category:'מכונות אריזה', url:'https://www.sacmi.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c19', name:'Totani', country:'Japan', location:'Hall 8a / B05', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.totani.co.jp', bookmarked:false, visited:false, icon:'🌿' },
+  { id:'c20', name:'BERICAP', country:'Germany', location:'Hall 9 / A15', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.bericap.com', bookmarked:false, visited:false, icon:'🔩' },
+  { id:'c21', name:'GEA Food Solutions', country:'Germany', location:'Hall 11 / D08', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.gea.com', bookmarked:false, visited:false, icon:'🥩' },
+  { id:'c22', name:'Fortress Technology', country:'UK', location:'Hall 11 / B17', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.fortresstechnology.com', bookmarked:false, visited:false, icon:'🎯' },
+  { id:'c23', name:'Fuji Machinery', country:'Japan', location:'Hall 6 / C04', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.fujimachinery.co.jp', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c24', name:'FRITSCH Bakery Technologies', country:'Germany', location:'Hall 3 / A12', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.fritsch-bakery.com', bookmarked:false, visited:false, icon:'🥐' },
+  { id:'c25', name:'G. Mondini', country:'Italy', location:'Hall 12 / C09', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.gmondini.com', bookmarked:false, visited:false, icon:'🥗' },
+  { id:'c26', name:'Coperion', country:'Germany', location:'Hall 4 / B06', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.coperion.com', bookmarked:false, visited:false, icon:'⚙️' },
+  { id:'c27', name:'Focke &amp; Co.', country:'Germany', location:'Hall 5 / D02', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.focke.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c28', name:'General Packer', country:'Japan', location:'Hall 13 / A18', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.generalpacker.com', bookmarked:false, visited:false, icon:'🫙' },
+  { id:'c29', name:'Theegarten-Pactec', country:'Germany', location:'Hall 1 / B08', hallGroup:'1-4', category:'מכונות אריזה', url:'https://www.theegarten-pactec.com', bookmarked:false, visited:false, icon:'🍬' },
+  { id:'c30', name:'FT System', country:'Italy', location:'Hall 12 / A05', hallGroup:'11-14', category:'בקרת איכות', url:'https://www.ftsystem.com', bookmarked:false, visited:false, icon:'🔬' },
+  { id:'c31', name:'Extrufood', country:'Netherlands', location:'Hall 6 / B18', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.extrufood.nl', bookmarked:false, visited:false, icon:'🌽' },
+  { id:'c32', name:'FAM International', country:'Belgium', location:'Hall 11 / C22', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.famgroup.com', bookmarked:false, visited:false, icon:'🔪' },
+  { id:'c33', name:'Gernep', country:'Germany', location:'Hall 8b / C11', hallGroup:'7-10', category:'תיוג ותוויות', url:'https://www.gernep.de', bookmarked:false, visited:false, icon:'🏷️' },
+  { id:'c34', name:'Fristam Pumpen', country:'Germany', location:'Hall 11 / D14', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.fristam.de', bookmarked:false, visited:false, icon:'💧' },
+  { id:'c35', name:'Furukawa Mfg.', country:'Japan', location:'Hall 13 / B10', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.furukawa-mfg.co.jp', bookmarked:false, visited:false, icon:'📦' },
+];
+
+// Visits store: { companyId: { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'', timestamp:'' } }
+let visits = {};
+
+// Current state
+let currentHallFilter = 'all';
+let currentSearchQuery = '';
+let activeVisitCompanyId = null;
+let isRecording = false;
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordTimer = null;
+let recordSeconds = 0;
+let selectedNewCategory = '';
+
+// Load from localStorage
+function loadData() {
+  try {
+    const c = localStorage.getItem('ip26_companies');
+    const v = localStorage.getItem('ip26_visits');
+    if (c) companies = JSON.parse(c);
+    if (v) visits = JSON.parse(v);
+  } catch(e) {}
+}
+
+function saveData() {
+  localStorage.setItem('ip26_companies', JSON.stringify(companies));
+  localStorage.setItem('ip26_visits', JSON.stringify(visits));
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function switchScreen(name, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  btn.classList.add('active');
+
+  if (name === 'companies') renderCompanies();
+  if (name === 'map') renderMap();
+  if (name === 'summary') renderSummary();
+  if (name === 'visit' && activeVisitCompanyId) renderVisitScreen(activeVisitCompanyId);
+  updateHeader();
+}
+
+// ============================================================
+// COMPANIES SCREEN
+// ============================================================
+function filterByHall(group, btn) {
+  currentHallFilter = group;
+  document.querySelectorAll('.hall-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderCompanies();
+}
+
+function filterCompanies() {
+  currentSearchQuery = document.getElementById('search-input').value.toLowerCase();
+  renderCompanies();
+}
+
+function getFilteredCompanies() {
+  return companies.filter(c => {
+    const hallMatch = currentHallFilter === 'all' || c.hallGroup === currentHallFilter;
+    const q = currentSearchQuery;
+    const searchMatch = !q ||
+      c.name.toLowerCase().includes(q) ||
+      (c.category||'').toLowerCase().includes(q) ||
+      (c.location||'').toLowerCase().includes(q) ||
+      (c.country||'').toLowerCase().includes(q);
+    return hallMatch && searchMatch;
+  });
+}
+
+function renderCompanies() {
+  const list = document.getElementById('companies-list');
+  const filtered = getFilteredCompanies();
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">לא נמצאו חברות</div><div class="empty-sub">נסה חיפוש אחר</div></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(c => {
+    const v = visits[c.id];
+    const hasPhotos = v && v.photos && v.photos.length > 0;
+    const hasAudio = v && v.audioClips && v.audioClips.length > 0;
+    const hasNote = v && v.notes && v.notes.trim();
+    const hasVideo = v && v.videoUrl;
+
+    let pills = '';
+    if (hasPhotos) pills += `<span class="media-pill photo">📷 ${v.photos.length}</span>`;
+    if (hasVideo) pills += `<span class="media-pill video">▶️ וידאו</span>`;
+    if (hasAudio) pills += `<span class="media-pill audio">🎙️ ${v.audioClips.length}</span>`;
+    if (hasNote) pills += `<span class="media-pill note">📝</span>`;
+
+    const priorityLabel = v && v.priority === 'high' ? '🔴' : v && v.priority === 'med' ? '🟡' : '';
+
+    return `<div class="company-card ${c.bookmarked?'bookmarked':''} ${c.visited?'visited':''}" onclick="openCompanyModal('${c.id}')">
+      <div class="card-header">
+        <div class="company-icon" style="background:var(--surface2)">${c.icon||'🏭'}</div>
+        <div class="card-info">
+          <div class="card-name">${c.name} ${priorityLabel}</div>
+          <div class="card-meta">
+            <span class="hall-badge">${c.location||'—'}</span>
+            <span class="category-tag">${c.category||''}</span>
+            <span class="category-tag" style="color:var(--text3)">${c.country||''}</span>
+          </div>
+        </div>
+        <div class="card-actions">
+          <div class="icon-btn ${c.bookmarked?'active':''}" onclick="event.stopPropagation();toggleBookmark('${c.id}')">⭐</div>
+          <div class="icon-btn" style="${c.visited?'background:rgba(127,255,110,0.1);border-color:var(--accent3)':''}" onclick="event.stopPropagation();openVisit('${c.id}')">📍</div>
+        </div>
+      </div>
+      ${pills ? `<div class="media-pills">${pills}</div>` : ''}
+      ${v && v.notes ? `<div class="card-notes-preview">📝 ${v.notes.substring(0,80)}${v.notes.length>80?'...':''}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleBookmark(id) {
+  const c = companies.find(x => x.id === id);
+  if (c) { c.bookmarked = !c.bookmarked; saveData(); renderCompanies(); updateHeader(); showToast(c.bookmarked ? '⭐ נוסף למועדפים' : 'הוסר ממועדפים'); }
+}
+
+function openVisit(id) {
+  activeVisitCompanyId = id;
+  // Switch to visit screen
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-visit').classList.add('active');
+  document.querySelectorAll('.nav-btn')[1].classList.add('active');
+  renderVisitScreen(id);
+}
+
+// ============================================================
+// COMPANY MODAL
+// ============================================================
+function openCompanyModal(id) {
+  const c = companies.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('modal-company-name').textContent = c.name;
+  const v = visits[c.id] || {};
+
+  document.getElementById('modal-company-body').innerHTML = `
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">מדינה</div>
+        <div style="font-size:14px;">${c.country||'—'}</div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">מיקום</div>
+        <div style="font-size:14px;font-family:IBM Plex Mono,monospace;">${c.location||'—'}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">קטגוריה</div>
+      <div class="category-tag" style="display:inline-block">${c.category||'—'}</div>
+    </div>
+    ${c.url ? `<a href="${c.url}" target="_blank" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--accent);font-size:13px;margin-bottom:16px;">🌐 <span style="direction:ltr">${c.url}</span></a>` : ''}
+    <div class="divider"></div>
+    <div style="margin-bottom:10px;font-size:13px;color:var(--text2);">סטטוס: ${c.visited ? '<span style="color:var(--accent3)">✅ ביקרתי</span>' : '<span style="color:var(--text3)">טרם ביקרתי</span>'}</div>
+    ${v.rating ? `<div style="margin-bottom:12px">דירוג: ${'⭐'.repeat(v.rating)}</div>` : ''}
+    <button class="btn btn-primary" onclick="closeModal('company-modal');openVisit('${id}')">📍 פתח ביקור ותיעוד</button>
+    <button class="btn btn-secondary" onclick="toggleBookmark('${id}');closeModal('company-modal')">${c.bookmarked?'💛 הסר ממועדפים':'⭐ הוסף למועדפים'}</button>
+    <button class="btn btn-danger" onclick="deleteCompany('${id}')">🗑️ מחק חברה</button>
+  `;
+  document.getElementById('company-modal').classList.add('open');
+}
+
+function deleteCompany(id) {
+  if (!confirm('מחק חברה זו?')) return;
+  companies = companies.filter(c => c.id !== id);
+  delete visits[id];
+  saveData();
+  closeModal('company-modal');
+  renderCompanies();
+  updateHeader();
+}
+
+// ============================================================
+// VISIT SCREEN
+// ============================================================
+function renderVisitScreen(id) {
+  const c = companies.find(x => x.id === id);
+  if (!c) return;
+  if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'', timestamp: new Date().toISOString() };
+  const v = visits[id];
+  c.visited = true;
+  saveData();
+
+  const content = document.getElementById('visit-content');
+  content.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);">
+      <div style="font-size:32px;">${c.icon||'🏭'}</div>
+      <div>
+        <div style="font-weight:700;font-size:17px;">${c.name}</div>
+        <div style="font-family:IBM Plex Mono,monospace;font-size:11px;color:var(--accent);">${c.location||'—'}</div>
+      </div>
+    </div>
+
+    <!-- PRIORITY -->
+    <div class="form-section">
+      <label class="form-label">עדיפות / עניין</label>
+      <div class="interest-selector">
+        <button class="interest-btn ${v.priority==='high'?'sel-high':''}" onclick="setPriority('${id}','high')">🔴 גבוה</button>
+        <button class="interest-btn ${v.priority==='med'?'sel-med':''}" onclick="setPriority('${id}','med')">🟡 בינוני</button>
+        <button class="interest-btn ${v.priority==='low'?'sel-low':''}" onclick="setPriority('${id}','low')">🟢 נמוך</button>
+      </div>
+    </div>
+
+    <!-- RATING -->
+    <div class="form-section">
+      <label class="form-label">דירוג כללי</label>
+      <div class="rating-stars" id="stars-${id}">
+        ${[1,2,3,4,5].map(n => `<span class="star ${v.rating>=n?'active':''}" onclick="setRating('${id}',${n})">⭐</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- PHOTOS -->
+    <div class="form-section">
+      <label class="form-label">📷 תמונות מכונה / ביתן</label>
+      <div class="photo-grid" id="photo-grid-${id}">
+        ${renderPhotoGrid(id)}
+        <div class="add-photo-btn" onclick="triggerPhoto('${id}')">
+          <span>📷</span>
+          <span>צלם</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO LINK -->
+    <div class="form-section">
+      <label class="form-label">▶️ קישור סרטון החברה</label>
+      <div style="display:flex;gap:8px;">
+        <input class="form-input" id="video-url-${id}" placeholder="https://youtube.com/..." dir="ltr" value="${v.videoUrl||''}" oninput="saveVideoUrl('${id}')">
+      </div>
+      ${v.videoUrl ? `<div class="video-link-display" style="margin-top:8px">
+        <span class="video-thumb-icon">▶️</span>
+        <span class="link-text">${v.videoUrl}</span>
+        <a href="${v.videoUrl}" target="_blank" style="color:var(--accent);font-size:12px;">פתח</a>
+      </div>` : ''}
+    </div>
+
+    <!-- AUDIO -->
+    <div class="form-section">
+      <label class="form-label">🎙️ הקלטת הסבר מציג</label>
+      <div class="audio-recorder">
+        <button class="record-btn ${isRecording && activeVisitCompanyId===id ? 'recording' : 'idle'}" id="record-btn-${id}" onclick="toggleRecording('${id}')">
+          ${isRecording && activeVisitCompanyId===id ? '⏹' : '🎙️'}
+        </button>
+        <div class="record-info">
+          <div class="record-status" id="record-status-${id}">${isRecording && activeVisitCompanyId===id ? 'מקליט...' : 'לחץ להקלטה'}</div>
+          <div class="record-timer" id="record-timer-${id}">${isRecording && activeVisitCompanyId===id ? formatTime(recordSeconds) : '00:00'}</div>
+        </div>
+      </div>
+      <div class="audio-clips" id="audio-clips-${id}">
+        ${renderAudioClips(id)}
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="form-section">
+      <label class="form-label">📝 הערות כתובות</label>
+      <textarea class="form-textarea" id="notes-${id}" placeholder="הוסף הערות, מחירים, נקודות לבדיקה..." oninput="saveNotes('${id}')">${v.notes||''}</textarea>
+    </div>
+
+    <button class="btn btn-success" onclick="finishVisit('${id}')">✅ סיים ביקור</button>
+  `;
+}
+
+function renderPhotoGrid(id) {
+  const v = visits[id];
+  if (!v || !v.photos || v.photos.length === 0) return '';
+  return v.photos.map((p, i) => `
+    <div class="photo-thumb">
+      <img src="${p}" alt="תמונה ${i+1}">
+      <button class="delete-photo" onclick="deletePhoto('${id}',${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function renderAudioClips(id) {
+  const v = visits[id];
+  if (!v || !v.audioClips || v.audioClips.length === 0) return '';
+  return v.audioClips.map((clip, i) => `
+    <div class="audio-clip">
+      <button class="play-btn" onclick="playAudio('${id}',${i})">▶</button>
+      <div class="clip-info">
+        <div class="clip-name">הקלטה ${i+1}</div>
+        <div class="clip-dur">${clip.duration || '—'}</div>
+      </div>
+      <button class="icon-btn" onclick="deleteAudio('${id}',${i})">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function triggerPhoto(id) {
+  activeVisitCompanyId = id;
+  const input = document.getElementById('photo-input');
+  input.onchange = function(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'', timestamp:new Date().toISOString() };
+        visits[id].photos.push(ev.target.result);
+        saveData();
+        renderVisitScreen(id);
+        showToast('📷 תמונה נשמרה!');
+      };
+      reader.readAsDataURL(file);
+    });
+    input.value = '';
+  };
+  input.click();
+}
+
+function deletePhoto(id, idx) {
+  visits[id].photos.splice(idx, 1);
+  saveData();
+  renderVisitScreen(id);
+}
+
+function saveVideoUrl(id) {
+  const val = document.getElementById(`video-url-${id}`)?.value || '';
+  if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'' };
+  visits[id].videoUrl = val;
+  saveData();
+}
+
+function saveNotes(id) {
+  const val = document.getElementById(`notes-${id}`)?.value || '';
+  if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'' };
+  visits[id].notes = val;
+  saveData();
+}
+
+function setPriority(id, p) {
+  if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'' };
+  visits[id].priority = p;
+  saveData();
+  renderVisitScreen(id);
+  updateHeader();
+}
+
+function setRating(id, r) {
+  if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'' };
+  visits[id].rating = r;
+  saveData();
+  // Update stars display
+  const stars = document.querySelectorAll(`#stars-${id} .star`);
+  stars.forEach((s, i) => s.classList.toggle('active', i < r));
+  showToast(`${'⭐'.repeat(r)} דירוג נשמר`);
+}
+
+function finishVisit(id) {
+  const c = companies.find(x => x.id === id);
+  c.visited = true;
+  saveData();
+  showToast('✅ ביקור הושלם!');
+  // Switch back to companies
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-companies').classList.add('active');
+  document.querySelectorAll('.nav-btn')[0].classList.add('active');
+  renderCompanies();
+  updateHeader();
+}
+
+function deleteAudio(id, idx) {
+  visits[id].audioClips.splice(idx, 1);
+  saveData();
+  document.getElementById(`audio-clips-${id}`).innerHTML = renderAudioClips(id);
+}
+
+function playAudio(id, idx) {
+  const clip = visits[id].audioClips[idx];
+  if (clip && clip.dataUrl) {
+    const audio = new Audio(clip.dataUrl);
+    audio.play();
+  }
+}
+
+// ============================================================
+// AUDIO RECORDING
+// ============================================================
+async function toggleRecording(id) {
+  if (isRecording) {
+    stopRecording(id);
+  } else {
+    await startRecording(id);
+  }
+}
+
+async function startRecording(id) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    recordedChunks = [];
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+      const reader = new FileReader();
+      reader.onload = ev => {
+        if (!visits[id]) visits[id] = { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'' };
+        visits[id].audioClips.push({ dataUrl: ev.target.result, duration: formatTime(recordSeconds) });
+        saveData();
+        document.getElementById(`audio-clips-${id}`).innerHTML = renderAudioClips(id);
+        showToast('🎙️ הקלטה נשמרה!');
+      };
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t => t.stop());
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    recordSeconds = 0;
+    recordTimer = setInterval(() => {
+      recordSeconds++;
+      const el = document.getElementById(`record-timer-${id}`);
+      if (el) el.textContent = formatTime(recordSeconds);
+    }, 1000);
+    const btn = document.getElementById(`record-btn-${id}`);
+    if (btn) { btn.className = 'record-btn recording'; btn.textContent = '⏹'; }
+    const st = document.getElementById(`record-status-${id}`);
+    if (st) st.textContent = 'מקליט...';
+  } catch(e) {
+    showToast('❌ אין גישה למיקרופון');
+  }
+}
+
+function stopRecording(id) {
+  if (mediaRecorder) { mediaRecorder.stop(); mediaRecorder = null; }
+  isRecording = false;
+  clearInterval(recordTimer);
+  const btn = document.getElementById(`record-btn-${id}`);
+  if (btn) { btn.className = 'record-btn idle'; btn.textContent = '🎙️'; }
+  const st = document.getElementById(`record-status-${id}`);
+  if (st) st.textContent = 'לחץ להקלטה';
+}
+
+function formatTime(s) {
+  return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+
+// ============================================================
+// MAP SCREEN
+// ============================================================
+function renderMap() {
+  const grid = document.getElementById('halls-map-grid');
+  const hallList = [
+    { key:'1-4', label:'1-4', sublabel:'ממתקים', icon:'🍫' },
+    { key:'5-6', label:'5-6', sublabel:'מזון', icon:'🥫' },
+    { key:'11-14', label:'11-14', sublabel:'מזון/משקאות', icon:'🍶' },
+    { key:'7-10', label:'7-10', sublabel:'חומרי אריזה', icon:'📦' },
+    { key:'15-17', label:'15-17', sublabel:'פארמה', icon:'💊' },
+    { key:'18', label:'18', sublabel:'קומפוננטים', icon:'⚙️' },
+  ];
+
+  grid.innerHTML = hallList.map(h => {
+    const compInHall = companies.filter(c => c.hallGroup === h.key);
+    const visitedCount = compInHall.filter(c => c.visited).length;
+    const bookmarkedCount = compInHall.filter(c => c.bookmarked).length;
+    const hasVisits = visitedCount > 0;
+    const hasBookmarks = bookmarkedCount > 0;
+
+    return `<div class="hall-block ${hasVisits?'has-visits':''} ${!hasVisits&&hasBookmarks?'bookmarked-hall':''}" onclick="showHallCompanies('${h.key}')">
+      ${hasVisits ? `<div class="hall-dot" style="background:var(--accent3)"></div>` : hasBookmarks ? `<div class="hall-dot" style="background:var(--gold)"></div>` : ''}
+      <div style="font-size:20px;margin-bottom:4px;">${h.icon}</div>
+      <div class="hall-num">${h.label}</div>
+      <div class="hall-name">${h.sublabel}</div>
+      <div class="hall-count">${visitedCount}/${compInHall.length}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('map-hall-companies').innerHTML = '';
+}
+
+function showHallCompanies(hallKey) {
+  const comp = companies.filter(c => c.hallGroup === hallKey);
+  const hall = HALLS[hallKey];
+  const container = document.getElementById('map-hall-companies');
+
+  if (comp.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">${hall.icon}</div><div class="empty-title">אין חברות רשומות</div></div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="section-header" style="margin-top:8px">
+      <span>${hall.icon} אולמות ${hallKey} — ${hall.name}</span>
+      <span>${comp.filter(c=>c.visited).length}/${comp.length} ביקרתי</span>
+    </div>
+    ${comp.map(c => `
+      <div class="company-card ${c.visited?'visited':''} ${c.bookmarked?'bookmarked':''}" onclick="openCompanyModal('${c.id}')">
+        <div class="card-header">
+          <div class="company-icon" style="background:var(--surface2)">${c.icon||'🏭'}</div>
+          <div class="card-info">
+            <div class="card-name">${c.name}</div>
+            <div class="card-meta">
+              <span class="hall-badge">${c.location||'—'}</span>
+              <span class="category-tag">${c.category||''}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <div class="icon-btn" onclick="event.stopPropagation();openVisit('${c.id}')">📍</div>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+// ============================================================
+// SUMMARY SCREEN
+// ============================================================
+function renderSummary() {
+  const visited = companies.filter(c => c.visited);
+  const highPriority = visited.filter(c => visits[c.id] && visits[c.id].priority === 'high');
+  const medPriority = visited.filter(c => visits[c.id] && visits[c.id].priority === 'med');
+  const totalPhotos = Object.values(visits).reduce((acc, v) => acc + (v.photos||[]).length, 0);
+
+  document.getElementById('sum-visited-count').textContent = visited.length;
+  document.getElementById('sum-high').textContent = highPriority.length;
+  document.getElementById('sum-med').textContent = medPriority.length;
+  document.getElementById('sum-photos').textContent = totalPhotos;
+
+  const list = document.getElementById('summary-list');
+
+  if (visited.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">טרם ביקרת בחברות</div><div class="empty-sub">התחל לתעד את הביקורים שלך</div></div>`;
+    return;
+  }
+
+  // Sort: high priority first
+  const sorted = [...visited].sort((a,b) => {
+    const pa = visits[a.id]?.priority;
+    const pb = visits[b.id]?.priority;
+    const order = { high:0, med:1, low:2, '':3 };
+    return (order[pa]||3) - (order[pb]||3);
+  });
+
+  list.innerHTML = sorted.map(c => {
+    const v = visits[c.id] || {};
+    const pClass = v.priority === 'high' ? 'priority-high' : v.priority === 'med' ? 'priority-med' : 'priority-low';
+    const pLabel = v.priority === 'high' ? '🔴 גבוה' : v.priority === 'med' ? '🟡 בינוני' : v.priority === 'low' ? '🟢 נמוך' : '';
+
+    return `<div class="company-card visited" style="margin-bottom:12px" onclick="openVisit('${c.id}')">
+      <div class="card-header">
+        <div class="company-icon" style="background:var(--surface2)">${c.icon||'🏭'}</div>
+        <div class="card-info">
+          <div class="card-name">${c.name}</div>
+          <div class="card-meta">
+            <span class="hall-badge">${c.location||'—'}</span>
+            ${v.rating ? `<span>${'⭐'.repeat(v.rating)}</span>` : ''}
+          </div>
+          ${pLabel ? `<div style="margin-top:6px"><span class="priority-tag ${pClass}">${pLabel}</span></div>` : ''}
+        </div>
+      </div>
+      <div class="media-pills">
+        ${(v.photos||[]).length > 0 ? `<span class="media-pill photo">📷 ${v.photos.length} תמונות</span>` : ''}
+        ${v.videoUrl ? `<span class="media-pill video">▶️ סרטון</span>` : ''}
+        ${(v.audioClips||[]).length > 0 ? `<span class="media-pill audio">🎙️ ${v.audioClips.length} הקלטות</span>` : ''}
+        ${v.notes ? `<span class="media-pill note">📝 הערות</span>` : ''}
+      </div>
+      ${v.notes ? `<div class="card-notes-preview">${v.notes.substring(0,100)}${v.notes.length>100?'...':''}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+function exportSummary() {
+  const visited = companies.filter(c => c.visited);
+  let html = `<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="UTF-8"><title>INTERPACK 2026 — סיכום</title>
+  <style>body{font-family:Arial,sans-serif;max-width:800px;margin:0 auto;padding:20px;direction:rtl}
+  h1{color:#0a6ebd}h2{border-bottom:2px solid #eee;padding-bottom:8px}
+  .company{border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:16px;page-break-inside:avoid}
+  .high{border-right:4px solid #ff4466}.med{border-right:4px solid #ffd166}.low{border-right:4px solid #7fff6e}
+  .meta{color:#666;font-size:13px;margin-bottom:8px}
+  .notes{background:#f9f9f9;padding:12px;border-radius:6px;margin-top:8px;font-size:14px}
+  img{max-width:200px;max-height:150px;object-fit:cover;border-radius:6px;margin:4px}
+  </style></head><body>
+  <h1>🏭 INTERPACK 2026 — דו"ח ביקורים</h1>
+  <p>תאריך ייצוא: ${new Date().toLocaleDateString('he-IL')}</p>
+  <p>סה"כ חברות שביקרתי: <strong>${visited.length}</strong></p>
+  <hr>`;
+
+  const sorted = [...visited].sort((a,b) => {
+    const order = { high:0, med:1, low:2, '':3 };
+    return (order[visits[a.id]?.priority]||3) - (order[visits[b.id]?.priority]||3);
+  });
+
+  sorted.forEach(c => {
+    const v = visits[c.id] || {};
+    const pc = v.priority === 'high' ? 'high' : v.priority === 'med' ? 'med' : 'low';
+    const pLabel = v.priority === 'high' ? '🔴 עדיפות גבוהה' : v.priority === 'med' ? '🟡 לבדיקה' : '🟢 עדיפות נמוכה';
+    html += `<div class="company ${pc}">
+      <h2>${c.icon||'🏭'} ${c.name}</h2>
+      <div class="meta">📍 ${c.location||'—'} | 🌍 ${c.country||'—'} | 🏷️ ${c.category||'—'}</div>
+      ${pLabel ? `<div style="margin-bottom:8px">${pLabel}</div>` : ''}
+      ${v.rating ? `<div>דירוג: ${'⭐'.repeat(v.rating)}</div>` : ''}
+      ${c.url ? `<div><a href="${c.url}">${c.url}</a></div>` : ''}
+      ${v.videoUrl ? `<div>▶️ סרטון: <a href="${v.videoUrl}">${v.videoUrl}</a></div>` : ''}
+      ${v.notes ? `<div class="notes">📝 ${v.notes}</div>` : ''}
+      ${(v.photos||[]).length > 0 ? `<div style="margin-top:8px">${v.photos.map(p=>`<img src="${p}">`).join('')}</div>` : ''}
+    </div>`;
+  });
+
+  html += `</body></html>`;
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `INTERPACK2026_summary.html`;
+  a.click();
+  showToast('📄 דו"ח יוצא!');
+}
+
+function copyTextSummary() {
+  const visited = companies.filter(c => c.visited);
+  let text = `🏭 INTERPACK 2026 — סיכום ביקורים\n`;
+  text += `תאריך: ${new Date().toLocaleDateString('he-IL')}\n`;
+  text += `סה"כ ביקורים: ${visited.length}\n\n`;
+
+  const sorted = [...visited].sort((a,b) => {
+    const order = { high:0, med:1, low:2, '':3 };
+    return (order[visits[a.id]?.priority]||3) - (order[visits[b.id]?.priority]||3);
+  });
+
+  sorted.forEach(c => {
+    const v = visits[c.id] || {};
+    const pLabel = v.priority === 'high' ? '🔴 גבוה' : v.priority === 'med' ? '🟡 בינוני' : '';
+    text += `━━━━━━━━━━━━━━━━\n`;
+    text += `${c.name} ${pLabel}\n`;
+    text += `📍 ${c.location||'—'} | ${c.country||'—'}\n`;
+    if (v.rating) text += `⭐ ${v.rating}/5\n`;
+    if (c.url) text += `🌐 ${c.url}\n`;
+    if (v.videoUrl) text += `▶️ ${v.videoUrl}\n`;
+    if (v.notes) text += `📝 ${v.notes}\n`;
+    if ((v.photos||[]).length > 0) text += `📷 ${v.photos.length} תמונות\n`;
+    if ((v.audioClips||[]).length > 0) text += `🎙️ ${v.audioClips.length} הקלטות\n`;
+    text += '\n';
+  });
+
+  navigator.clipboard.writeText(text).then(() => showToast('📋 הועתק ללוח!')).catch(() => showToast('❌ שגיאה בהעתקה'));
+}
+
+// ============================================================
+// ADD COMPANY MODAL
+// ============================================================
+function openAddCompanyModal() {
+  selectedNewCategory = '';
+  document.getElementById('new-company-name').value = '';
+  document.getElementById('new-company-country').value = '';
+  document.getElementById('new-company-location').value = '';
+  document.getElementById('new-company-url').value = '';
+
+  const grid = document.getElementById('new-category-grid');
+  grid.innerHTML = CATEGORIES.map(cat => `
+    <div class="segment-option" onclick="selectCategory('${cat}', this)">${cat}</div>
+  `).join('');
+
+  document.getElementById('add-company-modal').classList.add('open');
+}
+
+function selectCategory(cat, el) {
+  selectedNewCategory = cat;
+  document.querySelectorAll('#new-category-grid .segment-option').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function saveNewCompany() {
+  const name = document.getElementById('new-company-name').value.trim();
+  if (!name) { showToast('❌ חובה להזין שם חברה'); return; }
+
+  const location = document.getElementById('new-company-location').value.trim();
+  // Determine hall group from location
+  let hallGroup = '11-14';
+  const locLower = location.toLowerCase();
+  if (locLower.includes('hall 1') || locLower.includes('hall 3') || locLower.includes('hall 4')) hallGroup = '1-4';
+  else if (locLower.includes('hall 5') || locLower.includes('hall 6')) hallGroup = '5-6';
+  else if (locLower.includes('hall 7') || locLower.includes('hall 8') || locLower.includes('hall 9') || locLower.includes('hall 10')) hallGroup = '7-10';
+  else if (locLower.includes('hall 15') || locLower.includes('hall 16') || locLower.includes('hall 17')) hallGroup = '15-17';
+  else if (locLower.includes('hall 18')) hallGroup = '18';
+
+  const icons = { 'מכונות אריזה':'📦', 'מכונות מילוי':'🍶', 'מיון ובקרה':'🎯', 'תיוג ותוויות':'🏷️', 'קירור ואחסון':'❄️', 'רובוטיקה ואוטומציה':'🤖', 'חומרי אריזה':'🌿', 'מכונות עיבוד':'⚙️', 'בקרת איכות':'🔬', 'חיישנים ומדידה':'📡', 'פארמה':'💊', 'אחר':'🏭' };
+
+  companies.push({
+    id: 'c' + Date.now(),
+    name,
+    country: document.getElementById('new-company-country').value.trim(),
+    location,
+    hallGroup,
+    category: selectedNewCategory,
+    url: document.getElementById('new-company-url').value.trim(),
+    bookmarked: false,
+    visited: false,
+    icon: icons[selectedNewCategory] || '🏭'
+  });
+
+  saveData();
+  closeModal('add-company-modal');
+  renderCompanies();
+  updateHeader();
+  showToast('✅ חברה נוספה!');
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function updateHeader() {
+  document.getElementById('hdr-visited').textContent = companies.filter(c => c.visited).length;
+  document.getElementById('hdr-bookmarked').textContent = companies.filter(c => c.bookmarked).length;
+}
+
+// Close modals when clicking overlay
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();
+renderCompanies();
+updateHeader();
+</script>
+</body>
+</html>
