@@ -2,6 +2,21 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTERPACK 2026 | דו"ח קבוצתי מאוחד</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8eef5;
+    --border: #d0dae8;
+    --accent: #0072b8;
+    --accent2: #e85d20;
+    --accent3: #2a9d3f;<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#f0f4f8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1073,6 +1088,17 @@
     <button class="btn btn-danger" onclick="resetAllData()">🔄 איפוס נתונים (טען חברות עדכניות)</button>
   </div>
 
+  <div class="export-area">
+    <div class="export-title">👥 שיתוף קבוצתי</div>
+    <div class="export-sub">ייצא את הנתונים שלך ושלח לאחד הקבוצה שיאחד הכל לדו"ח משותף</div>
+    <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-size:12px;color:var(--text2);line-height:1.7;">
+      <div><strong>שלב 1:</strong> כל אחד לוחץ "ייצא קובץ אישי" ושולח בוואטסאפ</div>
+      <div><strong>שלב 2:</strong> אחד הקבוצה פותח את <a href="https://gabiiungelson.github.io/Interpack-2026/merge.html" style="color:var(--accent)">דף האיחוד</a> ומעלה את כל הקבצים</div>
+      <div><strong>שלב 3:</strong> מקבלים דו"ח קבוצתי מאוחד!</div>
+    </div>
+    <button class="btn btn-primary" onclick="exportPersonalJSON()">📤 ייצא קובץ אישי (JSON)</button>
+  </div>
+
   <div class="visited-section">
     <div class="section-title">חברות שביקרתי</div>
     <div id="summary-list"></div>
@@ -2032,6 +2058,38 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 });
 
 // ============================================================
+// EXPORT PERSONAL JSON
+// ============================================================
+function exportPersonalJSON() {
+  const name = prompt('מה שמך? (יופיע בדו"ח המשותף)', '') || 'משתמש';
+  const visited = companies.filter(c => c.visited);
+  if (visited.length === 0) {
+    showToast('❌ עדיין לא ביקרת בחברות');
+    return;
+  }
+  const data = {
+    user: name,
+    exportDate: new Date().toISOString(),
+    visits: visited.map(c => ({
+      id: c.id,
+      name: c.name,
+      country: c.country,
+      location: c.location,
+      category: c.category,
+      url: c.url,
+      bookmarked: c.bookmarked,
+      visitData: visits[c.id] || {}
+    }))
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `interpack2026_${name.replace(/\s/g,'_')}.json`;
+  a.click();
+  showToast(`📤 קובץ של ${name} יוצא!`);
+}
+
+// ============================================================
 // RESET
 // ============================================================
 function resetAllData() {
@@ -2052,6 +2110,584 @@ function resetAllData() {
 loadData();
 renderCompanies();
 updateHeader();
+</script>
+</body>
+</html>
+
+    --text: #1a2540;
+    --text2: #4a5a7a;
+    --text3: #8a9ab8;
+    --gold: #c4880a;
+    --danger: #d42050;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-logo { font-size: 28px; }
+  .header-text .brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 2px; }
+  .header-text .title { font-size: 20px; font-weight: 900; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* Upload zone */
+  .upload-zone {
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(0,114,184,0.03); }
+  .upload-zone .upload-icon { font-size: 48px; margin-bottom: 12px; }
+  .upload-zone .upload-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .upload-zone .upload-sub { font-size: 13px; color: var(--text2); }
+  #file-input { display: none; }
+
+  /* Files list */
+  .files-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .file-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .file-chip .chip-icon { font-size: 20px; }
+  .file-chip .chip-name { flex: 1; font-size: 13px; font-weight: 600; }
+  .file-chip .chip-count { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); }
+  .file-chip .chip-remove { cursor: pointer; color: var(--danger); font-size: 18px; }
+  .file-chip.loaded { border-color: var(--accent3); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-success { background: var(--accent3); color: white; }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+
+  /* Summary stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .s-num { font-family: 'IBM Plex Mono', monospace; font-size: 32px; font-weight: 600; line-height: 1; }
+  .stat-card .s-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* Members row */
+  .members-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .member-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid;
+  }
+
+  /* Company cards */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .company-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .company-row.multi-visit { border-color: var(--accent); }
+  .company-row.high-priority { border-right: 4px solid var(--danger); }
+  .company-row.med-priority { border-right: 4px solid var(--gold); }
+
+  .company-row-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .company-row-header:hover { background: var(--surface2); }
+
+  .co-icon { font-size: 24px; flex-shrink: 0; }
+  .co-info { flex: 1; min-width: 0; }
+  .co-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .co-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+  .badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .badge-hall { background: rgba(0,114,184,0.1); color: var(--accent); border: 1px solid rgba(0,114,184,0.2); }
+  .badge-cat { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .badge-count { background: rgba(0,114,184,0.15); color: var(--accent); border: 1px solid rgba(0,114,184,0.3); font-weight: 700; }
+
+  .visitors-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .visitor-chip {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .company-details {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 16px;
+    background: var(--surface2);
+  }
+  .company-details.open { display: block; }
+
+  .visitor-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .visitor-block-name {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .priority-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .visitor-note { font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 6px; background: var(--surface2); padding: 8px; border-radius: 6px; }
+  .visitor-media { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .media-tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .visitor-photos { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .visitor-photos img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); font-weight: 700; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
+  .empty-state .e-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state .e-title { font-size: 18px; color: var(--text2); margin-bottom: 8px; }
+
+  .top-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: rgba(196,136,10,0.15); color: var(--gold); border: 1px solid rgba(196,136,10,0.3); font-weight: 700; }
+
+  @media print {
+    .header, .upload-zone, .files-list, .actions, .filter-row, .btn { display: none !important; }
+    .company-details { display: block !important; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">🏭</div>
+  <div class="header-text">
+    <div class="brand">INTERPACK 2026</div>
+    <div class="title">דו"ח קבוצתי מאוחד</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Upload Zone -->
+  <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDrag(event)" ondrop="handleDrop(event)">
+    <div class="upload-icon">📂</div>
+    <div class="upload-title">העלה קבצי JSON של כל חברי הקבוצה</div>
+    <div class="upload-sub">גרור לכאן או לחץ לבחירת קבצים • ניתן לבחור מספר קבצים בבת אחת</div>
+  </div>
+  <input type="file" id="file-input" accept=".json" multiple onchange="handleFiles(this.files)">
+
+  <div class="files-list" id="files-list"></div>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="generateReport()" id="gen-btn" disabled>📊 צור דו"ח מאוחד</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ הדפס</button>
+    <button class="btn btn-secondary" onclick="exportGroupHTML()">📄 ייצא HTML</button>
+    <button class="btn btn-secondary" onclick="clearAll()">🗑️ נקה הכל</button>
+  </div>
+
+  <!-- Report area -->
+  <div id="report-area"></div>
+
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+let loadedFiles = []; // { name, user, visits: [...] }
+let allCompanies = []; // merged view
+let currentFilter = 'all';
+
+const MEMBER_COLORS = [
+  { bg: '#e8f4fd', border: '#0072b8', text: '#0072b8' },
+  { bg: '#fdf0e8', border: '#e85d20', text: '#e85d20' },
+  { bg: '#eafae8', border: '#2a9d3f', text: '#2a9d3f' },
+  { bg: '#fdf8e8', border: '#c4880a', text: '#c4880a' },
+  { bg: '#f8e8fd', border: '#8b2be0', text: '#8b2be0' },
+  { bg: '#e8fdfa', border: '#0a8b7a', text: '#0a8b7a' },
+];
+
+function getMemberColor(idx) {
+  return MEMBER_COLORS[idx % MEMBER_COLORS.length];
+}
+
+// ============================================================
+// FILE HANDLING
+// ============================================================
+function handleDrag(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('drag');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  handleFiles(e.dataTransfer.files);
+}
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.name.endsWith('.json')) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data.user || !data.visits) throw new Error('Invalid format');
+        // Check duplicate
+        if (loadedFiles.find(f => f.user === data.user)) {
+          alert(`קובץ של ${data.user} כבר נטען`);
+          return;
+        }
+        loadedFiles.push({ fileName: file.name, ...data });
+        renderFilesList();
+        document.getElementById('gen-btn').disabled = loadedFiles.length === 0;
+      } catch(err) {
+        alert('קובץ לא תקין: ' + file.name);
+      }
+    };
+    reader.readAsText(file);
+  });
+}
+
+function removeFile(user) {
+  loadedFiles = loadedFiles.filter(f => f.user !== user);
+  renderFilesList();
+  document.getElementById('gen-btn').disabled = loadedFiles.length === 0;
+  if (loadedFiles.length === 0) document.getElementById('report-area').innerHTML = '';
+}
+
+function clearAll() {
+  loadedFiles = [];
+  allCompanies = [];
+  renderFilesList();
+  document.getElementById('report-area').innerHTML = '';
+  document.getElementById('gen-btn').disabled = true;
+}
+
+function renderFilesList() {
+  const list = document.getElementById('files-list');
+  list.innerHTML = loadedFiles.map((f, i) => {
+    const col = getMemberColor(i);
+    return `<div class="file-chip loaded">
+      <span class="chip-icon" style="color:${col.text}">👤</span>
+      <span class="chip-name" style="color:${col.text}">${f.user}</span>
+      <span class="chip-count">${f.visits.length} ביקורים</span>
+      <span class="chip-remove" onclick="removeFile('${f.user}')">✕</span>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// MERGE & REPORT
+// ============================================================
+function generateReport() {
+  // Merge all visits by company id
+  const companyMap = {};
+
+  loadedFiles.forEach((file, userIdx) => {
+    file.visits.forEach(v => {
+      const key = v.id || v.name;
+      if (!companyMap[key]) {
+        companyMap[key] = {
+          id: v.id,
+          name: v.name,
+          country: v.country,
+          location: v.location,
+          category: v.category,
+          url: v.url,
+          icon: v.icon || '🏭',
+          visitors: []
+        };
+      }
+      companyMap[key].visitors.push({
+        user: file.user,
+        userIdx,
+        priority: v.visitData?.priority || '',
+        rating: v.visitData?.rating || 0,
+        notes: v.visitData?.notes || '',
+        photos: v.visitData?.photos || [],
+        audioClips: v.visitData?.audioClips || [],
+        videoUrl: v.visitData?.videoUrl || '',
+      });
+    });
+  });
+
+  allCompanies = Object.values(companyMap);
+
+  // Sort: most visited first, then by highest priority
+  allCompanies.sort((a, b) => {
+    if (b.visitors.length !== a.visitors.length) return b.visitors.length - a.visitors.length;
+    const pa = a.visitors.some(v => v.priority === 'high') ? 0 : a.visitors.some(v => v.priority === 'med') ? 1 : 2;
+    const pb = b.visitors.some(v => v.priority === 'high') ? 0 : b.visitors.some(v => v.priority === 'med') ? 1 : 2;
+    return pa - pb;
+  });
+
+  renderReport();
+}
+
+function renderReport() {
+  const area = document.getElementById('report-area');
+  if (allCompanies.length === 0) {
+    area.innerHTML = '<div class="empty-state"><div class="e-icon">📊</div><div class="e-title">אין נתונים</div></div>';
+    return;
+  }
+
+  const totalVisits = allCompanies.reduce((a,c) => a + c.visitors.length, 0);
+  const totalPhotos = allCompanies.reduce((a,c) => a + c.visitors.reduce((b,v) => b + v.photos.length, 0), 0);
+  const highPriority = allCompanies.filter(c => c.visitors.some(v => v.priority === 'high'));
+  const multiVisit = allCompanies.filter(c => c.visitors.length > 1);
+
+  // Filter
+  let filtered = allCompanies;
+  if (currentFilter === 'multi') filtered = multiVisit;
+  else if (currentFilter === 'high') filtered = highPriority;
+  else if (currentFilter === 'photos') filtered = allCompanies.filter(c => c.visitors.some(v => v.photos.length > 0));
+
+  // Members
+  const membersHtml = loadedFiles.map((f, i) => {
+    const col = getMemberColor(i);
+    return `<div class="member-chip" style="background:${col.bg};border-color:${col.border};color:${col.text}">
+      👤 ${f.user} — ${f.visits.length} ביקורים
+    </div>`;
+  }).join('');
+
+  area.innerHTML = `
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="s-num" style="color:var(--accent)">${loadedFiles.length}</div>
+        <div class="s-lbl">חברי קבוצה</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-num" style="color:var(--accent)">${allCompanies.length}</div>
+        <div class="s-lbl">חברות שביקרו</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-num" style="color:var(--danger)">${highPriority.length}</div>
+        <div class="s-lbl">עדיפות גבוהה</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-num" style="color:var(--gold)">${multiVisit.length}</div>
+        <div class="s-lbl">ביקרו יותר מאחד</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-num" style="color:var(--accent3)">${totalPhotos}</div>
+        <div class="s-lbl">תמונות</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-num" style="color:var(--text2)">${totalVisits}</div>
+        <div class="s-lbl">סה"כ ביקורים</div>
+      </div>
+    </div>
+
+    <!-- Members -->
+    <div class="section-title">חברי הקבוצה</div>
+    <div class="members-row">${membersHtml}</div>
+
+    <!-- Filter -->
+    <div class="filter-row">
+      <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">הכל (${allCompanies.length})</button>
+      <button class="filter-btn ${currentFilter==='multi'?'active':''}" onclick="setFilter('multi')">⭐ ביקרו יותר מאחד (${multiVisit.length})</button>
+      <button class="filter-btn ${currentFilter==='high'?'active':''}" onclick="setFilter('high')">🔴 עדיפות גבוהה (${highPriority.length})</button>
+      <button class="filter-btn ${currentFilter==='photos'?'active':''}" onclick="setFilter('photos')">📷 עם תמונות</button>
+    </div>
+
+    <!-- Companies -->
+    <div class="section-title">
+      <span>חברות (${filtered.length})</span>
+      <span style="font-size:11px;color:var(--text3);font-weight:400;">לחץ על חברה לפרטים</span>
+    </div>
+    <div id="companies-report">
+      ${filtered.map((c, idx) => renderCompanyRow(c, idx)).join('')}
+    </div>
+  `;
+}
+
+function renderCompanyRow(c, idx) {
+  const isMulti = c.visitors.length > 1;
+  const hasHigh = c.visitors.some(v => v.priority === 'high');
+  const hasMed = c.visitors.some(v => v.priority === 'med');
+  const priorityClass = hasHigh ? 'high-priority' : hasMed ? 'med-priority' : '';
+
+  const visitorsChips = c.visitors.map(v => {
+    const col = getMemberColor(v.userIdx);
+    const pEmoji = v.priority === 'high' ? '🔴' : v.priority === 'med' ? '🟡' : v.priority === 'low' ? '🟢' : '';
+    return `<span class="visitor-chip" style="background:${col.bg};border-color:${col.border};color:${col.text}">
+      ${v.user} ${pEmoji} ${v.rating ? '⭐'.repeat(v.rating) : ''}
+    </span>`;
+  }).join('');
+
+  return `<div class="company-row ${isMulti?'multi-visit':''} ${priorityClass}" id="co-${idx}">
+    <div class="company-row-header" onclick="toggleDetails(${idx})">
+      <span class="co-icon">${c.icon||'🏭'}</span>
+      <div class="co-info">
+        <div class="co-name">
+          ${c.name}
+          ${isMulti ? `<span class="badge badge-count">${c.visitors.length} ביקורים</span>` : ''}
+          ${isMulti ? `<span class="top-badge">⭐ מומלץ</span>` : ''}
+        </div>
+        <div class="co-meta">
+          <span class="badge badge-hall">${c.location||'—'}</span>
+          <span class="badge badge-cat">${c.category||''}</span>
+          <span class="badge badge-cat">${c.country||''}</span>
+        </div>
+        <div class="visitors-chips">${visitorsChips}</div>
+      </div>
+    </div>
+    <div class="company-details" id="details-${idx}">
+      ${c.url ? `<div style="margin-bottom:12px"><a href="${c.url}" target="_blank" style="color:var(--accent);font-size:13px;">🌐 ${c.url}</a></div>` : ''}
+      ${c.visitors.map(v => renderVisitorBlock(v)).join('')}
+    </div>
+  </div>`;
+}
+
+function renderVisitorBlock(v) {
+  const col = getMemberColor(v.userIdx);
+  const pColor = v.priority === 'high' ? '#d42050' : v.priority === 'med' ? '#c4880a' : '#2a9d3f';
+  const pLabel = v.priority === 'high' ? 'עדיפות גבוהה' : v.priority === 'med' ? 'לבדיקה' : v.priority === 'low' ? 'עדיפות נמוכה' : '';
+
+  const media = [];
+  if (v.photos.length > 0) media.push(`📷 ${v.photos.length} תמונות`);
+  if (v.videoUrl) media.push(`▶️ סרטון`);
+  if (v.audioClips.length > 0) media.push(`🎙️ ${v.audioClips.length} הקלטות`);
+
+  return `<div class="visitor-block">
+    <div class="visitor-block-name">
+      <span style="background:${col.bg};color:${col.text};border:1px solid ${col.border};padding:3px 10px;border-radius:12px;font-size:12px;">👤 ${v.user}</span>
+      ${v.rating ? `<span>${'⭐'.repeat(v.rating)}</span>` : ''}
+      ${pLabel ? `<span style="color:${pColor};font-size:12px;">● ${pLabel}</span>` : ''}
+    </div>
+    ${v.notes ? `<div class="visitor-note">📝 ${v.notes}</div>` : ''}
+    ${v.videoUrl ? `<div style="margin-top:6px;font-size:12px;"><a href="${v.videoUrl}" target="_blank" style="color:var(--accent);">▶️ ${v.videoUrl}</a></div>` : ''}
+    ${media.length > 0 ? `<div class="visitor-media">${media.map(m => `<span class="media-tag">${m}</span>`).join('')}</div>` : ''}
+    ${v.photos.length > 0 ? `<div class="visitor-photos">${v.photos.slice(0,6).map(p => `<img src="${p}" alt="תמונה">`).join('')}${v.photos.length > 6 ? `<div style="display:flex;align-items:center;justify-content:center;width:80px;height:60px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--text2);">+${v.photos.length-6}</div>` : ''}</div>` : ''}
+  </div>`;
+}
+
+function toggleDetails(idx) {
+  const el = document.getElementById(`details-${idx}`);
+  el.classList.toggle('open');
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  renderReport();
+}
+
+function exportGroupHTML() {
+  if (allCompanies.length === 0) { alert('צור קודם דו"ח'); return; }
+  const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `interpack2026_group_report.html`;
+  a.click();
+}
 </script>
 </body>
 </html>
