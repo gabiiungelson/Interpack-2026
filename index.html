@@ -1070,6 +1070,7 @@
     <div class="export-sub">קבל דו"ח מסכם של כל הביקורים, ממצאים ותמונות</div>
     <button class="btn btn-primary" onclick="exportSummary()">📄 ייצא דו"ח PDF</button>
     <button class="btn btn-secondary" onclick="copyTextSummary()">📋 העתק סיכום טקסט</button>
+    <button class="btn btn-danger" onclick="resetAllData()">🔄 איפוס נתונים (טען חברות עדכניות)</button>
   </div>
 
   <div class="visited-section">
@@ -1176,7 +1177,7 @@ const CATEGORIES = [
 const ICONS = ['🏭','🤖','📦','🔬','⚙️','🧪','🎯','🔧','💡','🌿'];
 
 // Default exhibitors based on INTERPACK 2026 info
-let companies = [
+function getDefaultCompanies() { return [
   { id:'c1', name:'MULTIVAC', country:'Germany', location:'Hall 13 / A01', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.multivac.com', bookmarked:false, visited:false, icon:'📦' },
   { id:'c2', name:'Krones', country:'Germany', location:'Hall 11 / C15', hallGroup:'11-14', category:'מכונות מילוי', url:'https://www.krones.com', bookmarked:false, visited:false, icon:'🍶' },
   { id:'c3', name:'Syntegon', country:'Germany', location:'Hall 6 / B12', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.syntegon.com', bookmarked:false, visited:false, icon:'🔧' },
@@ -1227,7 +1228,58 @@ let companies = [
   { id:'c48', name:'GEO Project Industries', country:'Italy', location:'Hall 6 / C18', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.geoprojectindustries.com', bookmarked:false, visited:false, icon:'⚙️' },
   { id:'c49', name:'FAM International (IT)', country:'Italy', location:'Hall 11 / B28', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.famgroup.com', bookmarked:false, visited:false, icon:'🔪' },
   { id:'c50', name:'Farmo Res', country:'Italy', location:'Hall 4 / A20', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.farmores.com', bookmarked:false, visited:false, icon:'🌾' },
-];
+  { id:'c51', name:'RONDO', country:'Switzerland', location:'Hall 3 / D17', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.rondo-online.com', bookmarked:false, visited:false, icon:'🥐' },
+  { id:'c52', name:'Stäubli Robotics', country:'Switzerland', location:'Hall 15 / C38', hallGroup:'15-17', category:'רובוטיקה ואוטומציה', url:'https://www.staubli.com', bookmarked:false, visited:false, icon:'🤖' },
+  { id:'c53', name:'Ferrum Packaging', country:'Switzerland', location:'Hall 14 / D52', hallGroup:'11-14', category:'מכונות אריזה', url:'https://ferrum.net', bookmarked:false, visited:false, icon:'🥫' },
+  { id:'c54', name:'Weber Maschinenbau', country:'Germany', location:'Hall 11 / C12', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.weberweb.com', bookmarked:false, visited:false, icon:'🔪' },
+  { id:'c55', name:'Treif', country:'Germany', location:'Hall 11 / A30', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.treif.com', bookmarked:false, visited:false, icon:'🔪' },
+  { id:'c56', name:'Marel', country:'Iceland', location:'Hall 12 / B20', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.marel.com', bookmarked:false, visited:false, icon:'🐟' },
+  { id:'c57', name:'JBT Corporation', country:'USA', location:'Hall 11 / D06', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.jbtc.com', bookmarked:false, visited:false, icon:'🏭' },
+  { id:'c58', name:'Alfa Laval', country:'Sweden', location:'Hall 11 / B04', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.alfalaval.com', bookmarked:false, visited:false, icon:'🌡️' },
+  { id:'c59', name:'SPX Flow', country:'USA', location:'Hall 12 / A10', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.spxflow.com', bookmarked:false, visited:false, icon:'💧' },
+  { id:'c60', name:'Tetra Pak', country:'Sweden', location:'Hall 13 / A01', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.tetrapak.com', bookmarked:false, visited:false, icon:'🥛' },
+  { id:'c61', name:'SIG Combibloc', country:'Switzerland', location:'Hall 13 / C04', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.sig.biz', bookmarked:false, visited:false, icon:'🥤' },
+  { id:'c62', name:'Elopak', country:'Norway', location:'Hall 14 / A08', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.elopak.com', bookmarked:false, visited:false, icon:'🥛' },
+  { id:'c63', name:'Bosch Packaging (Syntegon)', country:'Germany', location:'Hall 6 / D02', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.syntegon.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c64', name:'Heat and Control', country:'USA', location:'Hall 11 / C28', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.heatandcontrol.com', bookmarked:false, visited:false, icon:'🌡️' },
+  { id:'c65', name:'Rademaker', country:'Netherlands', location:'Hall 3 / B20', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.rademaker.com', bookmarked:false, visited:false, icon:'🥐' },
+  { id:'c66', name:'Rondo Burgdorf', country:'Germany', location:'Hall 4 / D10', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.rondo-burgdorf.de', bookmarked:false, visited:false, icon:'🍞' },
+  { id:'c67', name:'Rheon', country:'Japan', location:'Hall 3 / A06', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.rheon.com', bookmarked:false, visited:false, icon:'🥐' },
+  { id:'c68', name:'AMF Bakery Systems', country:'USA', location:'Hall 3 / C18', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.amfbakery.com', bookmarked:false, visited:false, icon:'🍞' },
+  { id:'c69', name:'Kaak Group', country:'Netherlands', location:'Hall 3 / B08', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.kaak.com', bookmarked:false, visited:false, icon:'🥖' },
+  { id:'c70', name:'Reading Bakery Systems', country:'USA', location:'Hall 3 / D04', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.readingbakery.com', bookmarked:false, visited:false, icon:'🍪' },
+  { id:'c71', name:'Inauen Schätti', country:'Switzerland', location:'Hall 12 / C16', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.inauen-schatti.ch', bookmarked:false, visited:false, icon:'🧀' },
+  { id:'c72', name:'Multivac Sepp Haggenmüller', country:'Germany', location:'Hall 6 / A04', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.multivac.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c73', name:'Proseal', country:'UK', location:'Hall 11 / B12', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.proseal.com', bookmarked:false, visited:false, icon:'🥗' },
+  { id:'c74', name:'Harpak-ULMA', country:'USA', location:'Hall 14 / B10', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.harpak-ulma.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c75', name:'Reiser', country:'USA', location:'Hall 11 / D16', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.reiser.com', bookmarked:false, visited:false, icon:'🥩' },
+  { id:'c76', name:'Loma Systems', country:'UK', location:'Hall 11 / C06', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.loma.com', bookmarked:false, visited:false, icon:'🎯' },
+  { id:'c77', name:'Mettler-Toledo', country:'Switzerland', location:'Hall 11 / A14', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.mt.com', bookmarked:false, visited:false, icon:'⚖️' },
+  { id:'c78', name:'Minebea Intec', country:'Germany', location:'Hall 11 / B22', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.minebea-intec.com', bookmarked:false, visited:false, icon:'⚖️' },
+  { id:'c79', name:'WIPOTEC', country:'Germany', location:'Hall 11 / C18', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.wipotec.com', bookmarked:false, visited:false, icon:'⚖️' },
+  { id:'c80', name:'Bizerba', country:'Germany', location:'Hall 8b / A14', hallGroup:'7-10', category:'מיון ובקרה', url:'https://www.bizerba.com', bookmarked:false, visited:false, icon:'⚖️' },
+  { id:'c81', name:'SICK AG', country:'Germany', location:'Hall 18a / B06', hallGroup:'18', category:'חיישנים ומדידה', url:'https://www.sick.com', bookmarked:false, visited:false, icon:'📡' },
+  { id:'c82', name:'Keyence', country:'Japan', location:'Hall 18b / A10', hallGroup:'18', category:'חיישנים ומדידה', url:'https://www.keyence.com', bookmarked:false, visited:false, icon:'📡' },
+  { id:'c83', name:'Cognex', country:'USA', location:'Hall 18a / C04', hallGroup:'18', category:'בקרת איכות', url:'https://www.cognex.com', bookmarked:false, visited:false, icon:'👁️' },
+  { id:'c84', name:'Greiner Packaging', country:'Austria', location:'Hall 7 / B08', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.greiner-gpi.com', bookmarked:false, visited:false, icon:'🧴' },
+  { id:'c85', name:'Sealed Air', country:'USA', location:'Hall 9 / C12', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.sealedair.com', bookmarked:false, visited:false, icon:'🛡️' },
+  { id:'c86', name:'Coveris', country:'Austria', location:'Hall 7 / A20', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.coveris.com', bookmarked:false, visited:false, icon:'🌿' },
+  { id:'c87', name:'Mondi Group', country:'Austria', location:'Hall 9 / B04', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.mondigroup.com', bookmarked:false, visited:false, icon:'📄' },
+  { id:'c88', name:'Smurfit Kappa', country:'Ireland', location:'Hall 7 / C06', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.smurfitkappa.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c89', name:'Windmöller & Hölscher', country:'Germany', location:'Hall 9 / A08', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.wuh-group.com', bookmarked:false, visited:false, icon:'🌿' },
+  { id:'c90', name:'Barry-Wehmiller', country:'USA', location:'Hall 12 / D08', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.barrywehmiller.com', bookmarked:false, visited:false, icon:'🏭' },
+  { id:'c91', name:'ProMach', country:'USA', location:'Hall 13 / C14', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.promachbuilt.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c92', name:'Cabinplant', country:'Denmark', location:'Hall 11 / A26', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.cabinplant.com', bookmarked:false, visited:false, icon:'🎯' },
+  { id:'c93', name:'Tomra Sorting', country:'Norway', location:'Hall 11 / B30', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.tomra.com', bookmarked:false, visited:false, icon:'♻️' },
+  { id:'c94', name:'Bühler Sortex', country:'Switzerland', location:'Hall 11 / D24', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.buhlergroup.com', bookmarked:false, visited:false, icon:'🌾' },
+  { id:'c95', name:'ANKO Food Machine', country:'Taiwan', location:'Hall 5 / B14', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.anko.com.tw', bookmarked:false, visited:false, icon:'🥟' },
+  { id:'c96', name:'Tecnopool', country:'Italy', location:'Hall 6 / C08', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.tecnopool.it', bookmarked:false, visited:false, icon:'🍞' },
+  { id:'c97', name:'Pavan Group', country:'Italy', location:'Hall 4 / B14', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.pavangroup.com', bookmarked:false, visited:false, icon:'🍝' },
+  { id:'c98', name:'Clextral', country:'France', location:'Hall 6 / D14', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.clextral.com', bookmarked:false, visited:false, icon:'🌽' },
+  { id:'c99', name:'Robatech', country:'Switzerland', location:'Hall 18b / C08', hallGroup:'18', category:'חיישנים ומדידה', url:'https://www.robatech.com', bookmarked:false, visited:false, icon:'🔧' },
+  { id:'c100', name:'Markem-Imaje', country:'France', location:'Hall 8b / B06', hallGroup:'7-10', category:'תיוג ותוויות', url:'https://www.markem-imaje.com', bookmarked:false, visited:false, icon:'🏷️' },
+]; }
+let companies = getDefaultCompanies();
 
 // Visits store: { companyId: { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'', timestamp:'' } }
 let visits = {};
@@ -1249,7 +1301,15 @@ function loadData() {
   try {
     const c = localStorage.getItem('ip26_companies');
     const v = localStorage.getItem('ip26_visits');
-    if (c) companies = JSON.parse(c);
+    if (c) {
+      const saved = JSON.parse(c);
+      // Merge: keep saved customizations but add any new default companies not yet in saved
+      const savedIds = new Set(saved.map(x => x.id));
+      const defaults = getDefaultCompanies();
+      const newOnes = defaults.filter(x => !savedIds.has(x.id));
+      companies = [...saved, ...newOnes];
+      if (newOnes.length > 0) saveData(); // persist merged list
+    }
     if (v) visits = JSON.parse(v);
   } catch(e) {}
 }
@@ -1970,6 +2030,21 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     if (e.target === this) this.classList.remove('open');
   });
 });
+
+// ============================================================
+// RESET
+// ============================================================
+function resetAllData() {
+  if (!confirm('האם לאפס את כל הנתונים ולטעון את רשימת החברות העדכנית?\nשים לב: ביקורים, תמונות והערות שמורות יימחקו!')) return;
+  localStorage.removeItem('ip26_companies');
+  localStorage.removeItem('ip26_visits');
+  visits = {};
+  companies = getDefaultCompanies();
+  saveData();
+  renderCompanies();
+  updateHeader();
+  showToast('✅ נתונים אופסו! כל החברות נטענו מחדש');
+}
 
 // ============================================================
 // INIT
