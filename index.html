@@ -995,6 +995,19 @@
     <button class="hall-tab" onclick="filterByHall('18', this)">אולם 18 (קומפוננטים)</button>
   </div>
 
+  <div class="hall-tabs" id="cat-tabs-container">
+    <button class="hall-tab active" onclick="filterByCategory('all', this)">🏷️ כל הקטגוריות</button>
+    <button class="hall-tab" onclick="filterByCategory('מכונות אריזה', this)">📦 מכונות אריזה</button>
+    <button class="hall-tab" onclick="filterByCategory('מכונות מילוי', this)">🍶 מכונות מילוי</button>
+    <button class="hall-tab" onclick="filterByCategory('מכונות עיבוד', this)">⚙️ מכונות עיבוד</button>
+    <button class="hall-tab" onclick="filterByCategory('מיון ובקרה', this)">🎯 מיון ובקרה</button>
+    <button class="hall-tab" onclick="filterByCategory('בקרת איכות', this)">🔬 בקרת איכות</button>
+    <button class="hall-tab" onclick="filterByCategory('רובוטיקה ואוטומציה', this)">🤖 רובוטיקה</button>
+    <button class="hall-tab" onclick="filterByCategory('תיוג ותוויות', this)">🏷️ תיוג ותוויות</button>
+    <button class="hall-tab" onclick="filterByCategory('חומרי אריזה', this)">🌿 חומרי אריזה</button>
+    <button class="hall-tab" onclick="filterByCategory('פארמה', this)">💊 פארמה</button>
+  </div>
+
   <div class="section-header">
     <span>חברות מציגות</span>
     <button class="icon-btn" style="width:auto;padding:0 10px;font-size:12px;" onclick="openAddCompanyModal()">+ הוסף ידנית</button>
@@ -1199,6 +1212,21 @@ let companies = [
   { id:'c33', name:'Gernep', country:'Germany', location:'Hall 8b / C11', hallGroup:'7-10', category:'תיוג ותוויות', url:'https://www.gernep.de', bookmarked:false, visited:false, icon:'🏷️' },
   { id:'c34', name:'Fristam Pumpen', country:'Germany', location:'Hall 11 / D14', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.fristam.de', bookmarked:false, visited:false, icon:'💧' },
   { id:'c35', name:'Furukawa Mfg.', country:'Japan', location:'Hall 13 / B10', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.furukawa-mfg.co.jp', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c36', name:'RONDO', country:'Switzerland/Italy', location:'Hall 3 / D17', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.rondo-online.com', bookmarked:false, visited:false, icon:'🥐' },
+  { id:'c37', name:'ILPRA Group', country:'Italy', location:'Hall 5 / C38', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.ilpra.com', bookmarked:false, visited:false, icon:'🥗' },
+  { id:'c38', name:'Ronchi Mario', country:'Italy', location:'Hall 12 / B14', hallGroup:'11-14', category:'מכונות מילוי', url:'https://www.ronchimario.com', bookmarked:false, visited:false, icon:'🍶' },
+  { id:'c39', name:'Ricciarelli', country:'Italy', location:'Hall 11 / A08', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.ricciarelli.it', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c40', name:'Robotek Group', country:'Italy', location:'Hall 13 / C06', hallGroup:'11-14', category:'רובוטיקה ואוטומציה', url:'https://www.robotekgroup.com', bookmarked:false, visited:false, icon:'🤖' },
+  { id:'c41', name:'Raytec Vision', country:'Italy', location:'Hall 11 / D20', hallGroup:'11-14', category:'מיון ובקרה', url:'https://www.ratecvision.com', bookmarked:false, visited:false, icon:'🔬' },
+  { id:'c42', name:'FAVA', country:'Italy', location:'Hall 6 / A14', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.fava.it', bookmarked:false, visited:false, icon:'🍝' },
+  { id:'c43', name:'Italpack', country:'Italy', location:'Hall 5 / B22', hallGroup:'5-6', category:'מכונות אריזה', url:'https://www.italpack.it', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c44', name:'PRISMA Industriale', country:'Italy', location:'Hall 12 / A18', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.prismaindustriale.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c45', name:'FBR-ELPO', country:'Italy', location:'Hall 3 / C10', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.fbr-elpo.it', bookmarked:false, visited:false, icon:'🍫' },
+  { id:'c46', name:'Fiorini International', country:'Italy', location:'Hall 9 / B06', hallGroup:'7-10', category:'חומרי אריזה', url:'https://www.fiorinigroup.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c47', name:'Gampack', country:'Italy', location:'Hall 13 / D04', hallGroup:'11-14', category:'מכונות אריזה', url:'https://www.gampack.com', bookmarked:false, visited:false, icon:'📦' },
+  { id:'c48', name:'GEO Project Industries', country:'Italy', location:'Hall 6 / C18', hallGroup:'5-6', category:'מכונות עיבוד', url:'https://www.geoprojectindustries.com', bookmarked:false, visited:false, icon:'⚙️' },
+  { id:'c49', name:'FAM International (IT)', country:'Italy', location:'Hall 11 / B28', hallGroup:'11-14', category:'מכונות עיבוד', url:'https://www.famgroup.com', bookmarked:false, visited:false, icon:'🔪' },
+  { id:'c50', name:'Farmo Res', country:'Italy', location:'Hall 4 / A20', hallGroup:'1-4', category:'מכונות עיבוד', url:'https://www.farmores.com', bookmarked:false, visited:false, icon:'🌾' },
 ];
 
 // Visits store: { companyId: { photos:[], videoUrl:'', audioClips:[], notes:'', rating:0, priority:'', timestamp:'' } }
@@ -1206,6 +1234,7 @@ let visits = {};
 
 // Current state
 let currentHallFilter = 'all';
+let currentCategoryFilter = 'all';
 let currentSearchQuery = '';
 let activeVisitCompanyId = null;
 let isRecording = false;
@@ -1251,7 +1280,14 @@ function switchScreen(name, btn) {
 // ============================================================
 function filterByHall(group, btn) {
   currentHallFilter = group;
-  document.querySelectorAll('.hall-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#hall-tabs-container .hall-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderCompanies();
+}
+
+function filterByCategory(cat, btn) {
+  currentCategoryFilter = cat;
+  document.querySelectorAll('#cat-tabs-container .hall-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
   renderCompanies();
 }
@@ -1264,13 +1300,14 @@ function filterCompanies() {
 function getFilteredCompanies() {
   return companies.filter(c => {
     const hallMatch = currentHallFilter === 'all' || c.hallGroup === currentHallFilter;
+    const catMatch = currentCategoryFilter === 'all' || c.category === currentCategoryFilter;
     const q = currentSearchQuery;
     const searchMatch = !q ||
       c.name.toLowerCase().includes(q) ||
       (c.category||'').toLowerCase().includes(q) ||
       (c.location||'').toLowerCase().includes(q) ||
       (c.country||'').toLowerCase().includes(q);
-    return hallMatch && searchMatch;
+    return hallMatch && catMatch && searchMatch;
   });
 }
 
